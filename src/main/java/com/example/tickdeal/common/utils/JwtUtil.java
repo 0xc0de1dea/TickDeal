@@ -58,7 +58,7 @@ public class JwtUtil {
     ) {
         Date now = new Date();
 
-        return Jwts.builder()
+        return BEARER_PREFIX + Jwts.builder()
                 .subject(email)
                 .claim("email", email)
                 .claim("role", role.name())
