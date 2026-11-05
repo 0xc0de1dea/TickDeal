@@ -23,6 +23,7 @@ public enum ErrorCode {
     /**
      * User
      */
+    INVALID_PASSWORD(HttpStatus.BAD_REQUEST, "비밀번호가 일치하지 않습니다."),
     USER_NOT_FOUND(HttpStatus.NOT_FOUND, "해당하는 유저를 찾을 수 없습니다."),
     USER_NOT_MATCHED(HttpStatus.CONFLICT, "권한이 없습니다."),
     USER_INVALID_ROLE(HttpStatus.UNAUTHORIZED, "잘못된 권한입니다.");
