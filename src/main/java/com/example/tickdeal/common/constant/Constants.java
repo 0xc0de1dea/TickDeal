@@ -6,6 +6,8 @@ public class Constants {
 
     public static final String BEARER_PREFIX = "Bearer ";
 
+    public static final String REFRESH_KEY_PREFIX = "refresh-token:";
+
     public static final long ACCESS_TOKEN_TIME = 60 * 60 * 1000L; // 60분
 
     public static final long REFRESH_TOKEN_TIME = ACCESS_TOKEN_TIME * 24 * 14L; // 14일
