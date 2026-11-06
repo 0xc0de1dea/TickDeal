@@ -40,7 +40,7 @@ public class User extends BaseEntity {
             min = 8,
             message = "비밀전호는 최소 8글자 이상입니다."
     )
-    @Column(nullable = false, length = 8, columnDefinition = "TEXT")
+    @Column(nullable = false, columnDefinition = "TEXT")
     private String password;
 
     @Column(nullable = false)

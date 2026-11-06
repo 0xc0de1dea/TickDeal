@@ -21,6 +21,11 @@ public enum ErrorCode {
     UNMATCHED_REFRESH_TOKEN(HttpStatus.CONFLICT, "리프레쉬 토큰이 일치하지 않습니다."),
 
     /**
+     * Product
+     */
+    PRODUCT_NOT_FOUND(HttpStatus.NOT_FOUND, "해당하는 상품을 찾을 수 없습니다."),
+
+    /**
      * User
      */
     INVALID_PASSWORD(HttpStatus.BAD_REQUEST, "비밀번호가 일치하지 않습니다."),
