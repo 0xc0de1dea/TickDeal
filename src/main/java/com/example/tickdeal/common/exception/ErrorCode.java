@@ -24,6 +24,16 @@ public enum ErrorCode {
      * Product
      */
     PRODUCT_NOT_FOUND(HttpStatus.NOT_FOUND, "해당하는 상품을 찾을 수 없습니다."),
+    PRODUCT_IS_DE_ACTIVE(HttpStatus.BAD_REQUEST, "비활성 상품은 딜을 생성할 수 없습니다."),
+
+    /**
+     * Deal
+     */
+    DEAL_PRICE_NOT_ALLOWED(HttpStatus.CONFLICT, "딜 가격은 0보다 커야 합니다."),
+    DEAL_STOCK_NOT_ALLOWED(HttpStatus.CONFLICT, "재고는 0보다 커야 합니다."),
+    DEAL_END_TIME_NOT_ALLOWED(HttpStatus.CONFLICT, "딜 종료 시간은 시작 시간보다 늦어야 합니다."),
+    DEAL_NOT_FOUND(HttpStatus.NOT_FOUND, "해당하는 딜을 찾을 수 없습니다."),
+    DEAL_ALREADY_IN_PROGRESS(HttpStatus.BAD_REQUEST, "진행 중이거나 종료된 딜은 수정할 수 없습니다."),
 
     /**
      * User

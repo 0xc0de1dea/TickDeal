@@ -55,6 +55,8 @@ public class ProductController {
     public ResponseEntity<ApiResponse<Void>> delete(
             @PathVariable Long productId
     ) {
+        productService.delete(productId);
+
         return ResponseEntity.status(HttpStatus.NO_CONTENT)
                 .body(ApiResponse.noContent());
     }

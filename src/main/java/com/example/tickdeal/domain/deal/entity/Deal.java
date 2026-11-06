@@ -1,6 +1,8 @@
 package com.example.tickdeal.domain.deal.entity;
 
 import com.example.tickdeal.common.entity.BaseEntity;
+import com.example.tickdeal.common.exception.ErrorCode;
+import com.example.tickdeal.common.exception.ServiceException;
 import com.example.tickdeal.domain.deal.enums.DealStatus;
 import com.example.tickdeal.domain.product.entity.Product;
 import jakarta.persistence.*;
@@ -17,7 +19,7 @@ import java.time.LocalDateTime;
 @Table(
         name = "deals"
 )
-public class Deal {
+public class Deal extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -69,6 +71,29 @@ public class Deal {
         this.stock = stock == null ? this.stock : stock;
         this.startAt = startAt == null ? this.startAt : startAt;
         this.endAt = endAt == null ? this.endAt : endAt;
+    }
+
+    // 타임딜 유효성 검증
+    private void validate(
+            Long dealPrice,
+            Integer stock,
+            LocalDateTime startAt,
+            LocalDateTime endAt
+    ) {
+        if (dealPrice == null || dealPrice <= 0) {
+            throw new ServiceException(ErrorCode.DEAL_PRICE_NOT_ALLOWED);
+        }
+
+        if (stock == null || stock <= 0) {
+            throw new ServiceException(ErrorCode.DEAL_STOCK_NOT_ALLOWED);
+        }
+
+        if (startAt == null || endAt == null ||
+                !startAt.isBefore(endAt)) {
+            throw new ServiceException(
+                    ErrorCode.DEAL_END_TIME_NOT_ALLOWED
+            );
+        }
     }
 
     // 타임딜 시작
