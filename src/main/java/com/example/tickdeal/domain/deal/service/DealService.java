@@ -6,6 +6,7 @@ import com.example.tickdeal.domain.deal.dto.DealDto;
 import com.example.tickdeal.domain.deal.entity.Deal;
 import com.example.tickdeal.domain.deal.enums.DealStatus;
 import com.example.tickdeal.domain.deal.repository.DealRepository;
+import com.example.tickdeal.domain.inventory.service.InventoryService;
 import com.example.tickdeal.domain.product.entity.Product;
 import com.example.tickdeal.domain.product.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +22,7 @@ public class DealService {
 
     private final DealRepository dealRepository;
     private final ProductRepository productRepository;
+    private final InventoryService inventoryService;
 
     @Transactional
     public DealDto.Response create(
@@ -44,6 +46,11 @@ public class DealService {
         );
 
         Deal saved = dealRepository.saveAndFlush(deal);
+
+        inventoryService.initializeStock(
+                saved.getId(),
+                saved.getStock()
+        );
 
         return DealDto.Response.from(saved);
     }

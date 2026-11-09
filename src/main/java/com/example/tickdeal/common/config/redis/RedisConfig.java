@@ -31,6 +31,8 @@ public class RedisConfig {
                 new GenericJackson2JsonRedisSerializer()
         );
 
+        redisTemplate.afterPropertiesSet();
+
         return redisTemplate;
     }
 }

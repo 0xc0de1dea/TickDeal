@@ -36,6 +36,14 @@ public enum ErrorCode {
     DEAL_ALREADY_IN_PROGRESS(HttpStatus.BAD_REQUEST, "진행 중이거나 종료된 딜은 수정할 수 없습니다."),
 
     /**
+     * Stock
+     */
+    STOCK_INFORMATION_NOT_EXISTS_REDIS(HttpStatus.NOT_FOUND, "Redis에 재고 정보가 존재하지 않습니다."),
+    STOCK_DECREASE_RESULT_NOT_EXISTS_REDIS(HttpStatus.NOT_FOUND, "Redis 재고 차감 결과가 없습니다."),
+    STOCK_RESTORE_RESULT_NOT_EXISTS_REDIS(HttpStatus.NOT_FOUND, "Redis 복구 결과가 없습니다."),
+    STOCK_ALREADY_INITIATED_REDIS(HttpStatus.CONFLICT, "이미 Redis 재고가 초기화되어 있습니다."),
+
+    /**
      * User
      */
     INVALID_PASSWORD(HttpStatus.BAD_REQUEST, "비밀번호가 일치하지 않습니다."),
