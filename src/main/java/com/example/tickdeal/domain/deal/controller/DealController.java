@@ -17,6 +17,18 @@ public class DealController {
 
     private final DealService dealService;
 
+    // TEST용 active
+    @PostMapping("/{id}")
+    public ResponseEntity<ApiResponse<Void>> activate(
+            @PathVariable Long id
+    ) {
+        dealService.active(id);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(ApiResponse.ok());
+    }
+
     @PostMapping
     public ResponseEntity<ApiResponse<DealDto.Response>> create(
             @RequestBody DealDto.Request request

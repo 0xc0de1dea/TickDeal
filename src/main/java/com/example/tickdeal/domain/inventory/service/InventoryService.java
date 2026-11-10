@@ -71,34 +71,42 @@ public class InventoryService {
         return Long.parseLong(stock);
     }
 
-    public Long decreaseStock(Long dealId) {
-        String key = getStockKey(dealId);
+    public Long decreaseStock(
+            Long flashDealId,
+            Integer quantity
+    ) {
+        String key = getStockKey(flashDealId);
 
         Long result = redisTemplate.execute(
                 decreaseStockScript,
-                java.util.Collections.singletonList(key)
+                java.util.Collections.singletonList(key),
+                String.valueOf(quantity)
         );
 
         if (result == null) {
-            throw new ServiceException(
-                    ErrorCode.STOCK_DECREASE_RESULT_NOT_EXISTS_REDIS
+            throw new IllegalStateException(
+                    "Redis 재고 차감 결과가 없습니다."
             );
         }
 
         return result;
     }
 
-    public Long restoreStock(Long dealId) {
-        String key = getStockKey(dealId);
+    public Long restoreStock(
+            Long flashDealId,
+            Integer quantity
+    ) {
+        String key = getStockKey(flashDealId);
 
         Long result = redisTemplate.execute(
                 restoreStockScript,
-                java.util.Collections.singletonList(key)
+                java.util.Collections.singletonList(key),
+                String.valueOf(quantity)
         );
 
         if (result == null) {
-            throw new ServiceException(
-                    ErrorCode.STOCK_RESTORE_RESULT_NOT_EXISTS_REDIS
+            throw new IllegalStateException(
+                    "Redis 재고 복구 결과가 없습니다."
             );
         }
 

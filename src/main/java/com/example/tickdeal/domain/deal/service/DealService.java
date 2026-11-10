@@ -24,6 +24,23 @@ public class DealService {
     private final ProductRepository productRepository;
     private final InventoryService inventoryService;
 
+    // TEST용 ACTIVE만들기
+    @Transactional
+    public void active(Long dealId) {
+        Deal deal = dealRepository.findById(dealId)
+                .orElseThrow(
+                        () -> new ServiceException(ErrorCode.DEAL_NOT_FOUND)
+                );
+
+        deal.activate();
+        deal.update(
+                null,
+                null,
+                LocalDateTime.now(),
+                LocalDateTime.now().plusHours(1)
+        );
+    }
+
     @Transactional
     public DealDto.Response create(
             DealDto.Request request

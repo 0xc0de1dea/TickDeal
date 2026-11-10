@@ -42,6 +42,22 @@ public enum ErrorCode {
     STOCK_DECREASE_RESULT_NOT_EXISTS_REDIS(HttpStatus.NOT_FOUND, "Redis 재고 차감 결과가 없습니다."),
     STOCK_RESTORE_RESULT_NOT_EXISTS_REDIS(HttpStatus.NOT_FOUND, "Redis 복구 결과가 없습니다."),
     STOCK_ALREADY_INITIATED_REDIS(HttpStatus.CONFLICT, "이미 Redis 재고가 초기화되어 있습니다."),
+    STOCK_LACK_REDIS(HttpStatus.CONFLICT, "재고가 부족합니다."),
+    STOCK_LACK_MYSQL(HttpStatus.CONFLICT, "MYSQL 재고 부족."),
+
+    /**
+     * Order
+     */
+    ORDER_NOT_ACTIVE(HttpStatus.BAD_REQUEST, "현재 구매할 수 있는 딜이 아닙니다."),
+    ORDER_NOT_PURCHASE_TIME(HttpStatus.BAD_REQUEST, "딜 판매 시간이 아닙니다."),
+    ORDER_QUANTITY_LESS_THAN_ZERO(HttpStatus.CONFLICT, "주문 수량은 1개 이상이어야 합니다."),
+    ORDER_INVALID(HttpStatus.CONFLICT, "잘못된 주문 수량입니다."),
+    ORDER_EVENT_PRODUCE_FAILED(HttpStatus.BAD_REQUEST, "주문 이벤트 발행에 실패했습니다."),
+
+    /**
+     * Kafka
+     */
+    KAFKA_SEND_ORDER_FAILED(HttpStatus.CONFLICT, "Kafka 주문 이벤트 발행에 실패했습니다."),
 
     /**
      * User
