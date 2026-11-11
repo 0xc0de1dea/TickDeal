@@ -1,25 +1,25 @@
 package com.example.tickdeal.domain.order.kafka;
 
-import com.example.tickdeal.common.exception.ErrorCode;
-import com.example.tickdeal.common.exception.ServiceException;
-import com.example.tickdeal.domain.deal.entity.Deal;
-import com.example.tickdeal.domain.deal.repository.DealRepository;
+import com.example.tickdeal.domain.notification.dto.OrderNotificationDto;
+import com.example.tickdeal.domain.notification.service.SseService;
 import com.example.tickdeal.domain.order.dto.OrderEvent;
-import com.example.tickdeal.domain.order.entity.Order;
-import com.example.tickdeal.domain.order.repository.OrderRepository;
+import com.example.tickdeal.domain.order.enums.OrderStatus;
 import com.example.tickdeal.domain.order.service.OrderPersistenceService;
-import com.example.tickdeal.domain.user.entity.User;
-import com.example.tickdeal.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class OrderConsumer {
 
     private final OrderPersistenceService orderPersistenceService;
+    private final SseService sseService;
 
     @KafkaListener(
             topics = "tickdeal-order",
@@ -28,5 +28,19 @@ public class OrderConsumer {
     @Transactional
     public void consume(OrderEvent event) {
         orderPersistenceService.saveOrder(event);
+
+        OrderNotificationDto notification = OrderNotificationDto.builder()
+                .orderNumber(event.getOrderNumber())
+                .status(OrderStatus.COMPLETED)
+                .message("주문이 완료되었습니다.")
+                .createdAt(LocalDateTime.now())
+                .build();
+
+        sseService.sendOrderNotification(
+                event.getUserId(),
+                notification
+        );
+
+        log.info("주문 처리 및 SSE 알림 완료: {}", event.getOrderNumber());
     }
 }

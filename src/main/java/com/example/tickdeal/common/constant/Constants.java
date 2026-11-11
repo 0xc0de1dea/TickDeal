@@ -12,6 +12,8 @@ public class Constants {
 
     public static final String STOCK_KEY_SUFFIX = ":stock";
 
+    public static final long SSE_TIMEOUT = 60 * 60 * 1000L; // 60분
+
     public static final long ACCESS_TOKEN_TIME = 60 * 60 * 1000L; // 60분
 
     public static final long REFRESH_TOKEN_TIME = ACCESS_TOKEN_TIME * 24 * 14L; // 14일
