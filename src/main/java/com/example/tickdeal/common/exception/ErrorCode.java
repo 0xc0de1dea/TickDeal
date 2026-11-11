@@ -53,6 +53,7 @@ public enum ErrorCode {
     ORDER_QUANTITY_LESS_THAN_ZERO(HttpStatus.CONFLICT, "주문 수량은 1개 이상이어야 합니다."),
     ORDER_INVALID(HttpStatus.CONFLICT, "잘못된 주문 수량입니다."),
     ORDER_EVENT_PRODUCE_FAILED(HttpStatus.BAD_REQUEST, "주문 이벤트 발행에 실패했습니다."),
+    ORDER_NOT_FOUND(HttpStatus.NOT_FOUND, "주문을 찾을 수 없습니다."),
 
     /**
      * Kafka

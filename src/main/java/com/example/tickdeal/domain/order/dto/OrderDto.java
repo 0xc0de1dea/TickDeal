@@ -68,4 +68,36 @@ public class OrderDto {
                     .build();
         }
     }
+
+    @Getter
+    @Builder(access = AccessLevel.PRIVATE)
+    @JsonPropertyOrder({"orderNumber", "dealId", "productName", "status", "orderPrice", "quantity", "createdAt"})
+    public static class DetailResponse {
+
+        private String orderNumber;
+
+        private Long dealId;
+
+        private String productName;
+
+        private OrderStatus status;
+
+        private Long orderPrice;
+
+        private Integer quantity;
+
+        private LocalDateTime createdAt;
+
+        public static DetailResponse from(Order order) {
+            return DetailResponse.builder()
+                    .orderNumber(order.getOrderNumber())
+                    .dealId(order.getDeal().getId())
+                    .productName(order.getDeal().getProduct().getName())
+                    .status(order.getStatus())
+                    .orderPrice(order.getOrderPrice())
+                    .quantity(order.getQuantity())
+                    .createdAt(order.getCreatedAt())
+                    .build();
+        }
+    }
 }

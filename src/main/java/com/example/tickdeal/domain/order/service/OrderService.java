@@ -15,7 +15,11 @@ import com.example.tickdeal.domain.order.repository.OrderRepository;
 import com.example.tickdeal.domain.user.entity.User;
 import com.example.tickdeal.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 
@@ -116,5 +120,49 @@ public class OrderService {
                 quantity,
                 now
         );
+    }
+
+    @Transactional(readOnly = true)
+    public OrderDto.DetailResponse getOrder(
+            org.springframework.security.core.userdetails.User user,
+            String orderNumber
+    ) {
+        String email = user.getUsername();
+
+        User savedUser = userRepository.findUserByEmail(email)
+                .orElseThrow(
+                        () -> new ServiceException(ErrorCode.USER_NOT_FOUND)
+                );
+
+        Order order = orderRepository
+                .findByOrderNumberAndUserId(orderNumber, savedUser.getId())
+                .orElseThrow(
+                        () -> new ServiceException(ErrorCode.ORDER_NOT_FOUND)
+                );
+
+        return OrderDto.DetailResponse.from(order);
+    }
+
+    @Transactional(readOnly = true)
+    public Page<OrderDto.DetailResponse> getOrders(
+            org.springframework.security.core.userdetails.User user,
+            int page,
+            int size
+    ) {
+        String email = user.getUsername();
+
+        User savedUser = userRepository.findUserByEmail(email)
+                .orElseThrow(
+                        () -> new ServiceException(ErrorCode.USER_NOT_FOUND)
+                );
+
+        Pageable pageable = PageRequest.of(
+                page,
+                size
+        );
+
+        return orderRepository
+                .findAllByUserIdOrderByCreatedAtDesc(savedUser.getId(), pageable)
+                .map(OrderDto.DetailResponse::from);
     }
 }
