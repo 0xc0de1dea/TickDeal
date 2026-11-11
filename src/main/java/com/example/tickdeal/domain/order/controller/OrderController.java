@@ -53,4 +53,14 @@ public class OrderController {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.ok(orderService.getOrders(user, page, size)));
     }
+
+    @GetMapping("/pending")
+    public ResponseEntity<ApiResponse<ApiResponse.PageResponse<OrderDto.DetailResponse>>> getPendingOrders(
+            @AuthenticationPrincipal User user,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.ok(orderService.getPendingOrders(user, page, size)));
+    }
 }

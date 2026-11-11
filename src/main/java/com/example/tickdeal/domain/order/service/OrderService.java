@@ -165,4 +165,31 @@ public class OrderService {
                 .findAllByUserIdOrderByCreatedAtDesc(savedUser.getId(), pageable)
                 .map(OrderDto.DetailResponse::from);
     }
+
+    @Transactional(readOnly = true)
+    public Page<OrderDto.DetailResponse> getPendingOrders(
+            org.springframework.security.core.userdetails.User user,
+            int page,
+            int size
+    ) {
+        String email = user.getUsername();
+
+        User savedUser = userRepository.findUserByEmail(email)
+                .orElseThrow(
+                        () -> new ServiceException(ErrorCode.USER_NOT_FOUND)
+                );
+
+        Pageable pageable = PageRequest.of(
+                page,
+                size
+        );
+
+        return orderRepository
+                .findAllByUserIdAndStatusOrderByCreatedAtDesc(
+                        savedUser.getId(),
+                        OrderStatus.PENDING,
+                        pageable
+                )
+                .map(OrderDto.DetailResponse::from);
+    }
 }
