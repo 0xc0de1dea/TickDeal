@@ -24,7 +24,7 @@ public class Constants {
 
     public static final String REFRESH = "REFRESH";
 
-    public static final long MAX_IN_FLIGHT_REQUESTS_PER_CONNECTION = 5;
+    public static final int MAX_IN_FLIGHT_REQUESTS_PER_CONNECTION = 5;
 
-    public static final long MAX_POLL_RECORDS_CONFIG = 10;
+    public static final int MAX_POLL_RECORDS_CONFIG = 10;
 }
