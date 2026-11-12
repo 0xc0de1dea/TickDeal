@@ -37,10 +37,13 @@ public class OrderService {
 
     private final OrderProducer orderProducer;
 
+    private final OrderPersistenceService orderPersistenceService;
+
     public OrderDto.Response createOrder(
             org.springframework.security.core.userdetails.User user,
             OrderDto.Request request
     ) {
+
         String email = user.getUsername();
 
         User savedUser = userRepository.findUserByEmail(email)
@@ -55,42 +58,34 @@ public class OrderService {
 
         LocalDateTime now = LocalDateTime.now();
 
+        // 딜 상태 검증
         if (deal.getStatus() != DealStatus.ACTIVE) {
             throw new ServiceException(ErrorCode.ORDER_NOT_ACTIVE);
         }
 
+        // 판매 시간 검증
         if (now.isBefore(deal.getStartAt())
-        || !now.isBefore(deal.getEndAt())) {
+                || !now.isBefore(deal.getEndAt())) {
             throw new ServiceException(ErrorCode.ORDER_NOT_PURCHASE_TIME);
         }
 
         Integer quantity = request.getQuantity();
 
         if (quantity == null || quantity <= 0) {
-            throw new ServiceException(ErrorCode.ORDER_QUANTITY_LESS_THAN_ZERO);
+            throw new ServiceException(
+                    ErrorCode.ORDER_QUANTITY_LESS_THAN_ZERO
+            );
         }
+
+        // 주문 가격 계산
+        Long orderPrice = Math.multiplyExact(
+                deal.getDealPrice(),
+                quantity.longValue()
+        );
 
         String orderNumber = Order.generateOrderNumber();
 
-        Long orderPrice = deal.getDealPrice() * quantity;
-
-        Long remainingStock = inventoryService.decreaseStock(
-                deal.getId(),
-                quantity
-        );
-
-        if (remainingStock == -1) {
-            throw new ServiceException(ErrorCode.STOCK_INFORMATION_NOT_EXISTS_REDIS);
-        }
-
-        if (remainingStock == -2) {
-            throw new ServiceException(ErrorCode.ORDER_INVALID);
-        }
-
-        if (remainingStock == 0) {
-            throw new ServiceException(ErrorCode.STOCK_LACK_REDIS);
-        }
-
+        // Kafka 이벤트 생성
         OrderEvent event = OrderEvent.builder()
                 .orderNumber(orderNumber)
                 .userId(savedUser.getId())
@@ -100,11 +95,43 @@ public class OrderService {
                 .createdAt(now)
                 .build();
 
+        // 1. Redis 재고 선점
+        Long remainingStock = inventoryService.decreaseStock(
+                deal.getId(),
+                quantity
+        );
+
+        if (remainingStock == -1) {
+            throw new ServiceException(
+                    ErrorCode.STOCK_INFORMATION_NOT_EXISTS_REDIS
+            );
+        }
+
+        if (remainingStock == -2) {
+            throw new ServiceException(ErrorCode.ORDER_INVALID);
+        }
+
+        if (remainingStock == -3) {
+            throw new ServiceException(ErrorCode.STOCK_LACK_REDIS);
+        }
+
         try {
+
+            // 2. MySQL PENDING 주문 생성
+            orderPersistenceService.createPendingOrder(event);
+
+            // 3. Kafka 주문 이벤트 발행
             orderProducer.sendOrder(event);
+
         } catch (Exception e) {
-            inventoryService.restoreStock(
+
+            // 4. 주문 실패 처리
+            orderPersistenceService.failOrder(orderNumber);
+
+            // 5. Redis 재고 복구 (주문별 멱등성)
+            inventoryService.restoreStockOnce(
                     deal.getId(),
+                    orderNumber,
                     quantity
             );
 
@@ -113,6 +140,7 @@ public class OrderService {
             );
         }
 
+        // 6. 주문 접수 응답
         return OrderDto.Response.build(
                 orderNumber,
                 OrderStatus.PENDING,
