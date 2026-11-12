@@ -27,20 +27,36 @@ public class OrderConsumer {
     )
     @Transactional
     public void consume(OrderEvent event) {
-        orderPersistenceService.saveOrder(event);
 
-        OrderNotificationDto notification = OrderNotificationDto.builder()
-                .orderNumber(event.getOrderNumber())
-                .status(OrderStatus.COMPLETED)
-                .message("주문이 완료되었습니다.")
-                .createdAt(LocalDateTime.now())
-                .build();
-
-        sseService.sendOrderNotification(
-                event.getUserId(),
-                notification
+        log.info(
+                "Kafka 주문 이벤트 수신: {}",
+                event.getOrderNumber()
         );
 
-        log.info("주문 처리 및 SSE 알림 완료: {}", event.getOrderNumber());
+        // MySQL 주문 완료 처리
+        boolean completed =
+                orderPersistenceService.completeOrder(event);
+
+        // 실제 상태 변경이 발생한 경우에만 SSE
+        if (completed) {
+
+            OrderNotificationDto notification =
+                    OrderNotificationDto.builder()
+                            .orderNumber(event.getOrderNumber())
+                            .status(OrderStatus.COMPLETED)
+                            .message("주문이 완료되었습니다.")
+                            .createdAt(LocalDateTime.now())
+                            .build();
+
+            sseService.sendOrderNotification(
+                    event.getUserId(),
+                    notification
+            );
+        }
+
+        log.info(
+                "Kafka 주문 처리 완료: {}",
+                event.getOrderNumber()
+        );
     }
 }
