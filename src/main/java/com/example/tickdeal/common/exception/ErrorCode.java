@@ -54,6 +54,8 @@ public enum ErrorCode {
     ORDER_INVALID(HttpStatus.CONFLICT, "잘못된 주문 수량입니다."),
     ORDER_EVENT_PRODUCE_FAILED(HttpStatus.BAD_REQUEST, "주문 이벤트 발행에 실패했습니다."),
     ORDER_NOT_FOUND(HttpStatus.NOT_FOUND, "주문을 찾을 수 없습니다."),
+    ORDER_CAN_COMPLETE_ON_PENDING(HttpStatus.BAD_REQUEST, "PENDING 주문만 완료할 수 있습니다."),
+    ORDER_CAN_FAIL_PROCESS_ON_PENDING(HttpStatus.BAD_REQUEST, "PENDING 주문만 실패 처리할 수 있습니다."),
 
     /**
      * Kafka

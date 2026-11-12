@@ -1,6 +1,8 @@
 package com.example.tickdeal.domain.order.entity;
 
 import com.example.tickdeal.common.entity.BaseEntity;
+import com.example.tickdeal.common.exception.ErrorCode;
+import com.example.tickdeal.common.exception.ServiceException;
 import com.example.tickdeal.domain.deal.entity.Deal;
 import com.example.tickdeal.domain.order.enums.OrderStatus;
 import com.example.tickdeal.domain.user.entity.User;
@@ -75,10 +77,22 @@ public class Order extends BaseEntity {
     }
 
     public void complete() {
+        if (this.status != OrderStatus.PENDING) {
+            throw new ServiceException(
+                    ErrorCode.ORDER_CAN_COMPLETE_ON_PENDING
+            );
+        }
+
         this.status = OrderStatus.COMPLETED;
     }
 
     public void fail() {
+        if (this.status != OrderStatus.PENDING) {
+            throw new ServiceException(
+                    ErrorCode.ORDER_CAN_FAIL_PROCESS_ON_PENDING
+            );
+        }
+
         this.status = OrderStatus.FAILED;
     }
 }
