@@ -49,3 +49,7 @@ spring:
 jwt:
   secret:
     key: IfthisgetsstolenitsabigproblemIfthelengthistooshortthesecurityisnotsufficientsoanerroroccurs
+
+tickdeal:
+  demo:
+    enabled: ${TICKDEAL_DEMO_ENABLED:false}

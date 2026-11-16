@@ -97,15 +97,17 @@ services:
         condition: service_healthy
 
     environment:
-      DATASOURCE_URL: jdbc:mysql://mysql:3306/nbcam?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
-      DATASOURCE_USERNAME: root
-      DATASOURCE_PASSWORD: 1234
+      DB_URL: jdbc:mysql://mysql:3306/nbcam?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+      DB_USERNAME: root
+      DB_PASSWORD: 1234
 
       SPRING_DATA_REDIS_HOST: redis
       SPRING_DATA_REDIS_PORT: 6379
 
       # Kafka
       SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9093
+
+      TICKDEAL_DEMO_ENABLED: "true"
 
     ports:
       - "8080:8080"

@@ -33,14 +33,16 @@ public class JwtFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String authorizationHeader = request.getHeader(AUTH_HEADER);
 
-        if (authorizationHeader == null
-                || !authorizationHeader.startsWith(BEARER_PREFIX)) {
+        if (authorizationHeader == null || authorizationHeader.isBlank()) {
             filterChain.doFilter(request, response);
             return;
         }
 
-        String jwt = authorizationHeader
-                .substring(BEARER_PREFIX.length());
+        String jwt = authorizationHeader;
+
+        if (authorizationHeader.startsWith(BEARER_PREFIX)) {
+            jwt = authorizationHeader.substring(BEARER_PREFIX.length());
+        }
 
         if (!jwtUtil.validateAccessToken(jwt)) {
             send(response, HttpServletResponse.SC_UNAUTHORIZED,

@@ -33,9 +33,11 @@ public class DealDto {
     @AllArgsConstructor
     @Builder(access = AccessLevel.PRIVATE)
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    @JsonPropertyOrder({"productId", "productName", "originalPrice", "dealPrice", "stock"
-                        , "startAt", "endAt", "status", "createdAt", "modifiedAt"})
+    @JsonPropertyOrder({"id", "productId", "productName", "originalPrice", "dealPrice", "stock"
+            , "startAt", "endAt", "status", "createdAt", "modifiedAt"})
     public static class Response {
+
+        private Long id;
 
         private Long productId;
 
@@ -85,6 +87,7 @@ public class DealDto {
 
         public static Response from(Deal deal) {
             return Response.builder()
+                    .id(deal.getId())
                     .productId(deal.getProduct().getId())
                     .productName(deal.getProduct().getName())
                     .originalPrice(
