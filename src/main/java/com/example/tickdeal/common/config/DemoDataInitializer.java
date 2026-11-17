@@ -58,43 +58,43 @@ public class DemoDataInitializer implements CommandLineRunner {
                 new DemoProduct(
                         "루미 프리미엄 테이블 램프",
                         "공간에 따뜻함을 더하는 감성 조명",
-                        69000, 39000, 350,
+                        69000, 39000, 35,
                         "/images/demo/lamp.jpg"
                 ),
                 new DemoProduct(
                         "모노 미니 블루투스 스피커",
                         "작은 크기에 담긴 풍부한 사운드",
-                        89000, 49000, 400,
+                        89000, 49000, 40,
                         "/images/demo/speaker.jpg"
                 ),
                 new DemoProduct(
                         "모노 온도조절 전기포트 0.8L",
                         "정밀 온도 조절이 가능한 전기포트",
-                        99000, 59000, 300,
+                        99000, 59000, 30,
                         "/images/demo/kettle.jpg"
                 ),
                 new DemoProduct(
                         "클라우드 무선 마우스",
                         "부드러운 그립감의 무선 마우스",
-                        39000, 24900, 450,
+                        39000, 24900, 45,
                         "/images/demo/mouse.jpg"
                 ),
                 new DemoProduct(
                         "오브 스테인리스 텀블러 500ml",
                         "오래 유지되는 보온과 보냉",
-                        35000, 18900, 600,
+                        35000, 18900, 60,
                         "/images/demo/tumbler.jpg"
                 ),
                 new DemoProduct(
                         "포레스트 디퓨저 200ml",
                         "은은한 향기가 머무는 공간",
-                        45000, 22900, 250,
+                        45000, 22900, 10,
                         "/images/demo/diffuser.jpg"
                 ),
                 new DemoProduct(
                         "루프 스마트 충전기 65W",
                         "작고 빠른 멀티 충전기",
-                        59000, 29000, 500,
+                        59000, 29000, 50,
                         "/images/demo/charger.jpg"
                 )
         );
