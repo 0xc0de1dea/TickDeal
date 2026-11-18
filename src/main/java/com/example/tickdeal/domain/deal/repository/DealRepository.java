@@ -9,7 +9,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
-public interface DealRepository extends JpaRepository<Deal, Long> {
+public interface DealRepository extends JpaRepository<Deal, Long>, DealCustomRepository {
 
     List<Deal> findAllByStatus(DealStatus status);
 

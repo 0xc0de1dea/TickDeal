@@ -1,5 +1,6 @@
 package com.example.tickdeal.domain.deal.service;
 
+import com.example.tickdeal.common.dto.ApiResponse;
 import com.example.tickdeal.common.exception.ErrorCode;
 import com.example.tickdeal.common.exception.ServiceException;
 import com.example.tickdeal.domain.deal.dto.DealDto;
@@ -10,6 +11,9 @@ import com.example.tickdeal.domain.inventory.service.InventoryService;
 import com.example.tickdeal.domain.product.entity.Product;
 import com.example.tickdeal.domain.product.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -70,6 +74,16 @@ public class DealService {
         );
 
         return DealDto.Response.from(saved);
+    }
+
+    @Transactional(readOnly = true)
+    public Page<DealDto.Response> searchDealByMulticondition(String name, int page, int size) {
+        Pageable pageable = PageRequest.of(
+                page,
+                size
+        );
+
+        return dealRepository.searchDealByMultiCondition(name, pageable);
     }
 
     @Transactional(readOnly = true)

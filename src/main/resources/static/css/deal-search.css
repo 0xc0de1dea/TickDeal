@@ -1,0 +1,118 @@
+
+/* 검색어 입력 안내 텍스트 숨김 */
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+
+/* 검색창 */
+.deal-search-form {
+    display: flex;
+    gap: 10px;
+    max-width: 720px;
+    margin: 24px 0 10px;
+}
+
+
+/* 검색 입력창 */
+.deal-search-form input {
+    min-width: 0;
+    flex: 1;
+    padding: 13px 16px;
+    border: 1px solid #dddddd;
+    border-radius: 6px;
+    background: #fff;
+    outline: none;
+}
+
+
+/* 검색창 포커스 */
+.deal-search-form input:focus {
+    border-color: #f13f46;
+    box-shadow: 0 0 0 2px rgba(241, 63, 70, .1);
+}
+
+
+/* 검색 버튼 */
+.deal-search-form button {
+    min-width: 90px;
+    font-weight: 700;
+}
+
+
+/* 검색 결과 안내 */
+.deal-search-summary {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    min-height: 25px;
+}
+
+
+/* 검색 초기화 */
+#clear-search {
+    color: #e83f47;
+}
+
+
+/* 페이지네이션 영역 */
+.deal-pagination {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+    margin: 34px 0;
+}
+
+
+/* 페이지 버튼 */
+.deal-pagination a {
+    min-width: 36px;
+    height: 36px;
+    padding: 7px 10px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid #e8e8e8;
+    border-radius: 6px;
+    background: white;
+    font-weight: 600;
+    font-size: 13px;
+}
+
+
+/* 현재 페이지 버튼 */
+.deal-pagination a[aria-current="page"] {
+    background: #f13f46;
+    border-color: #f13f46;
+    color: white;
+}
+
+
+/* 페이지 버튼 hover */
+.deal-pagination a:hover:not([aria-current="page"]) {
+    border-color: #f13f46;
+    color: #f13f46;
+}
+
+
+/* 모바일 반응형 */
+@media(max-width: 760px) {
+
+    .deal-search-form {
+        gap: 7px;
+    }
+
+    .deal-search-form button {
+        min-width: 74px;
+        padding: 11px 14px;
+    }
+}

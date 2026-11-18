@@ -38,6 +38,17 @@ public class DealController {
                 .body(ApiResponse.created(dealService.create(request)));
     }
 
+    @GetMapping("/search")
+    public ResponseEntity<ApiResponse<ApiResponse.PageResponse<DealDto.Response>>> searchDealByMulticondition(
+            @RequestParam(defaultValue = "", required = false) String name,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.ok(dealService.searchDealByMulticondition(name, page, size)));
+
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse<DealDto.Response>> findOne(
             @PathVariable Long id
