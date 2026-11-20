@@ -117,7 +117,7 @@ public class DemoDataInitializer implements CommandLineRunner {
                     sample.dealPrice(),
                     sample.stock(),
                     now.minusMinutes(5),
-                    now.plusDays(7)
+                    now.plusDays(1)
             );
 
             // 생성자의 기본 상태는 SCHEDULED
